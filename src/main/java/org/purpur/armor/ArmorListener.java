@@ -20,47 +20,49 @@ public class ArmorListener implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (args.length == 0) {
-            sender.sendMessage(ColorUtils.t("&8[&d&lPurpur&8] &7/pparmor [helmet/chestplate/leggings/boots] [#color]"));
-            return true;
-        }
-
-        if (args.length == 1) {
-            sender.sendMessage(ColorUtils.t("&8[&d&lPurpur&8] &7/pparmor [helmet/chestplate/leggings/boots] [#color]"));
-            sender.sendMessage(ColorUtils.t("&8[&d&lPurpur&8] &cNo color has been specified on this command."));
-        }
-
-        if (args.length == 2) {
-            String armorPiece = args[0];
-            String color = args[1];
-
-            if (!isValidArmorPiece(armorPiece)) {
-                sender.sendMessage(ColorUtils.t("&8[&d&lPurpur&8] &cInvalid armor piece. Valid armor pieces are: " + String.join(", ", valids)));
-                return false;
+        if (sender.hasPermission("purpurleatherarmor.use")) {
+            if (args.length == 0) {
+                sender.sendMessage(ColorUtils.t("&8[&d&lPurpur&8] &7/pparmor [helmet/chestplate/leggings/boots] [#color]"));
+                return true;
             }
 
-            if (!isValidHexColor(color)) {
-                sender.sendMessage(ColorUtils.t("&8[&d&lPurpur&8] &cInvalid color. Valid colors are: #000000, #0000FF, #00FF00, #FF0000, #FFFFFF"));
-                return false;
+            if (args.length == 1) {
+                sender.sendMessage(ColorUtils.t("&8[&d&lPurpur&8] &7/pparmor [helmet/chestplate/leggings/boots] [#color]"));
+                sender.sendMessage(ColorUtils.t("&8[&d&lPurpur&8] &cNo color has been specified on this command."));
             }
 
-            String hex = color.replace("#", "");
-            Material material = armorPieceToMaterial(armorPiece);
-            int hexInt = Integer.parseInt(hex, 16);
+            if (args.length == 2) {
+                String armorPiece = args[0];
+                String color = args[1];
 
-            ItemStack item = new ItemStack(material);
-            LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
-            assert meta != null;
-            meta.setColor(Color.fromRGB(hexInt));
-            item.setItemMeta(meta);
+                if (!isValidArmorPiece(armorPiece)) {
+                    sender.sendMessage(ColorUtils.t("&8[&d&lPurpur&8] &cInvalid armor piece. Valid armor pieces are: " + String.join(", ", valids)));
+                    return false;
+                }
 
-            if (sender instanceof Player) {
-                Player player = (Player) sender;
-                PlayerInventory inventory = player.getInventory();
-                inventory.addItem(item);
-                player.sendMessage(ColorUtils.t("&8[&d&lPurpur&8] &7You have been given a " + armorPiece + " with the color " + color));
-            } else {
-                sender.sendMessage(ColorUtils.t("&8[&d&lPurpur&8] &cYou must be a player to use this command."));
+                if (!isValidHexColor(color)) {
+                    sender.sendMessage(ColorUtils.t("&8[&d&lPurpur&8] &cInvalid color. Valid colors are: #000000, #0000FF, #00FF00, #FF0000, #FFFFFF"));
+                    return false;
+                }
+
+                String hex = color.replace("#", "");
+                Material material = armorPieceToMaterial(armorPiece);
+                int hexInt = Integer.parseInt(hex, 16);
+
+                ItemStack item = new ItemStack(material);
+                LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
+                assert meta != null;
+                meta.setColor(Color.fromRGB(hexInt));
+                item.setItemMeta(meta);
+
+                if (sender instanceof Player) {
+                    Player player = (Player) sender;
+                    PlayerInventory inventory = player.getInventory();
+                    inventory.addItem(item);
+                    player.sendMessage(ColorUtils.t("&8[&d&lPurpur&8] &7You have been given a " + armorPiece + " with the color " + color));
+                } else {
+                    sender.sendMessage(ColorUtils.t("&8[&d&lPurpur&8] &cYou must be a player to use this command."));
+                }
             }
         }
 
