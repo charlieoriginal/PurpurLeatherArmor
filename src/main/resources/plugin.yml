@@ -1,0 +1,11 @@
+name: PurpurLeatherArmor
+version: '${project.version}'
+main: org.purpur.armor.PurpurLeatherArmor
+api-version: 1.13
+authors: [ Baguette ]
+description: This is a plugin for giving yourself custom-coloured leather armor.
+website: www.purpurplugins.org
+commands:
+  pparmor:
+    description: A command to give yourself custom-colored leather armor.
+    aliases: [ppleather, ppl]
